@@ -1,6 +1,7 @@
 import requests
 import datetime
 import time
+from playsound import playsound
 
 today = datetime.date.today()
 day = int(today.strftime("%d"))
@@ -26,9 +27,9 @@ def vaccine_finder(data , vaccine_list):
 def center_finder(data , vaccine_list):
   if vaccine_finder(data , vaccine_list) == True:
     for i in vaccine_list :
-      return f"vaccine avaliable at {data[vaccine_list[i]][NAME]} ,address {data[vaccine_list[i]][ADDRESS]} at pincode {data[vaccine_list[i]][PINCODE]} time python searched {datetime.datetime.now()}"
+      return f"vaccine avaliable at {data[vaccine_list[i]][NAME]} ,address {data[vaccine_list[i]][ADDRESS]} at pincode {data[vaccine_list[i]][PINCODE]} time python searched {datetime.datetime.now()} {BELL} "
   else :
-    return f"No vaccines avaliable at time {datetime.datetime.now()}"    
+    return False    
 
 #Constant Section
 NAME = "name"
@@ -36,7 +37,8 @@ PINCODE = "pincode"
 DISTRICT_NAME = "district_name"
 DATE = "date"
 ADDRESS = "address"
-DISTRICT_ID = 44
+DISTRICT_ID = 764
+BELL = "\a" * 60
 
 #Empty_lists for storing values
 vaccine_avalaible = [] 
@@ -53,7 +55,7 @@ while 3 > 2 :
 
   #Loading_data_sets
 
-  data_today = request1.json()["sessions"]
+  data_today = request1.json()["sessions"] # {key:value , key: value}
   data_tommorow = request2.json()["sessions"]
   data_day_after_tommorow = request3.json()["sessions"]
 
@@ -61,10 +63,14 @@ while 3 > 2 :
 
   print(center_finder(data_today , vaccine_avalaible)) #Vaccines_on_current_date
   print(center_finder(data_tommorow , vaccine_avalaible1)) #Vaccines_tommorow
-  print(center_finder(data_day_after_tommorow , vaccine_avalaible2)) #Vaccines_day_after_tommorow
+  print(center_finder(data_day_after_tommorow , vaccine_avalaible2))#Vaccines_day_after_tommorow
+
+  if center_finder(data_today , vaccine_avalaible) or center_finder (data_tommorow , vaccine_avalaible1) or center_finder(data_day_after_tommorow , vaccine_avalaible2) != False :
+    playsound("Real_Police_Siren_freetone.at.ua.mp3")
+
 
   #Sleeping_because_of_API_limit
   print("\n")
-  time.sleep(300)
+  time.sleep(60)
 
   
